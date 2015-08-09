@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+    <beans xmlns="http://www.springframework.org/schema/beans"
+    	xmlns:p = "http://www.springframework.org/schema/p"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-3.1.xsd"		
+ 		xmlns:context="http://www.springframework.org/schema/context"
+ 		>
+ 		
+ 		<!-- 这个标签的作用是它能够指导Bean进行自动装配，同时需要配置命名空间 -->
+ 		<!-- <context:annotation-config/> -->
+ 		
+ 		<context:component-scan 
+ 			base-package="com.spring.in.action.three">
+ 		</context:component-scan>
+ 		
+ 		<bean
+ 			id = "instrument"
+ 			class = "com.spring.in.action.three.Saxophone">
+ 		</bean>
+ 		
+ 		<bean
+ 			id = "piano"
+ 			class = "com.spring.in.action.three.Piano">
+ 		</bean>
+ 		
+ 		<bean
+ 			id = "kenny"
+ 			class = "com.spring.in.action.three.Instrumentalist"
+ 			autowire = "byName">
+ 			<property name="song" value = "Hua Huo"></property>
+ 		</bean>
+ 		
+ 		<bean
+ 			id = "_kenny"
+ 			class = "com.spring.in.action.three._Instrumentalist">
+ 			<property name="song" value = "Wu Suo Wei"></property>
+ 		</bean>
+ 		
+ 	</beans>

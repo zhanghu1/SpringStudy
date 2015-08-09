@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+    <beans xmlns="http://www.springframework.org/schema/beans"
+    	xmlns:p = "http://www.springframework.org/schema/p"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+<!-- 所有的Bean默认都是单例的，当容器分配一个Bean时，它总是返回同一个Bean的实例 
+	我们可以自己定义Bean的作用域，可以产生新的实例利用 scope = "prototype",它默认
+	是scope = "singleton"
+-->
+		
+ 		<bean
+ 			id = "duke"
+ 			class = "com.spring.in.action.Juggler">		<!-- 配置在这里的称为bean的属性 -->
+ 			<constructor-arg value = "15"></constructor-arg>
+ 		</bean>
+ 		
+ 		<bean 	id = "sonnet"
+ 				class = "com.spring.in.action.Sonnet" />
+ 		
+ 		<bean 
+ 			id = "poeticDuke"
+ 			class = "com.spring.in.action.PoeticJuggler">
+ 			<!-- 通过构造函数来生成对象，在构造函数中注入需要的对象，
+ 			这里的参数都需要加上引号，而且顺序需要和构造函数中参数声明的顺序一致（我猜测） 
+ 			在赋值的过程中，不论是什么都需要加上引号，如例子所示，int类型的也要-->
+ 			<constructor-arg name = "poem" ref = "sonnet"></constructor-arg>
+ 			<constructor-arg name = "beanBags" value = "15"></constructor-arg>
+ 		</bean>	
+ 			
+ 		<bean
+ 			id = "theStage"
+ 			class = "com.spring.in.action.Stage"
+ 			factory-method = "getInstance">		
+ 		</bean>
+ 		
+ 		<!-- 我不理解为什么这里的初始化和销毁方法会主动调用 -->
+ 		<bean
+ 			id = "auditorium"
+ 			class = "com.spring.in.action.Auditorium"
+ 			init-method = "turnOnLights"
+ 			destroy-method = "turnOffLights">
+ 		</bean>
+ 			
+ 		<bean
+ 			id = "saxophone"
+ 			class = "com.spring.in.action.Saxophone">
+ 		</bean>
+ 		
+ 		<bean
+ 			id = "piano"
+ 			class = "com.spring.in.action.Piano">
+ 		</bean>
+ 		
+ 		<bean
+ 			id = "kenny"
+ 			class = "com.spring.in.action.Instrumentalist">
+ 			<property name="song" value = "Huo Yuan Jia"></property>
+ 			<property name="instrument" ref = "saxophone"></property>
+ 		</bean>
+ 		
+ 		<bean
+ 			id = "kenny_p"
+ 			class = "com.spring.in.action.Instrumentalist"
+ 			p:song = "Jingle Bells"
+ 			p:instrument-ref = "piano">
+ 		</bean>
+ 		
+ 		<!-- spring提供了集合类的设置属性的方法，属性的类型不仅可以是Collection的，
+ 		也可以是List和Set型的，甚至可以是数组类型的，都可以利用list和set的方法
+ 		进行注入 -->
+ 		<bean
+ 			id = "oneManBand"
+ 			class = "com.spring.in.action.OneManBand">
+ 			<property name="instruments">
+ 				<list>
+ 					<ref bean = "saxophone"/>
+ 					<ref bean = "piano"/>
+ 				</list>
+ 			</property>
+ 		</bean>
+ 		
+ 		<!-- 使用Spring表达式语言（SpEL）完成注入，注意，这里的方法调用需要先实现
+ 		kenny这个Bean，那么这里也是Spring自动去实现的，对于kenny的各种依赖和属性
+ 		的注入都是不需要我们自己负责的
+ 		?.是一种null-safe存取器，当前面的值为null时，将不再尝试执行后面的方法，避免
+ 		抛出空指针异常 -->
+ 		<bean
+ 			id = "carl_SpEL"
+ 			class = "com.spring.in.action.Carl_SpEL">
+ 			<property name="song" value = "#{kenny.getSong()?.toUpperCase()}"></property>
+ 		</bean>
+ 		
+ 	</beans>
